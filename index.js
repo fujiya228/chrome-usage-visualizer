@@ -76,12 +76,12 @@ ipcMain.on('get-data', async (event) => {
 
       const tmpRows = rows.map((row) => {
         const visitDate = new Date((row.last_visit_time / 1000) + chromeEpoch);
-        return [
-          profileInfo.account_info[0].email,
-          row.url,
-          row.title,
-          visitDate
-        ];
+        return {
+          email: profileInfo.account_info[0].email,
+          url: row.url,
+          title: row.title,
+          visitDate: visitDate
+        };
       });
 
       allProfileRows.push(...tmpRows);
