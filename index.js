@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -7,17 +7,23 @@ const sqlite3 = require('sqlite3').verbose();
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
-    height: 600
-  })
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  });
 
   win.loadFile('index.html')
 }
 
-app.whenReady().then(() => {
-  createWindow()
+app.whenReady().then(createWindow);
 
+ipcMain.on('get-data', async (event) => {
   const username = os.userInfo().username;
   console.log(username);
+
+  const allProfileRows = [];
 
   const dbPath = `/Users/${username}/Library/Application Support/Google/Chrome/Default/History`;
   const tempPath = path.join(__dirname, 'tempHistoryCopy');
@@ -35,6 +41,7 @@ app.whenReady().then(() => {
   const db = new sqlite3.Database(tempPath, sqlite3.OPEN_READONLY, (err) => {
     if (err) {
       console.error(err.message);
+      event.returnValue = { error: err.message };
       return;
     }
     console.log('Connected to the database.');
@@ -47,25 +54,40 @@ app.whenReady().then(() => {
     ORDER BY last_visit_time DESC
 `;
 
-  db.all(query, [twoWeeksAgoMicroseconds], (err, rows) => {
-    if (err) {
-      console.error(err.message);
-      return;
-    }
-    rows.forEach((row) => {
-      // ChromeのタイムスタンプをJavaScriptのDateに変換
-      const visitDate = new Date((row.last_visit_time / 1000) + chromeEpoch);
-      console.log(`URL: ${row.url}, Title: ${row.title}, Last Visit: ${visitDate}`);
+  try {
+    const rows = await new Promise((resolve, reject) => {
+      db.all(query, [twoWeeksAgoMicroseconds], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
     });
-  });
 
-  db.close((err) => {
-    if (err) {
-      console.error(err.message);
-      return;
-    }
-    console.log('Closed the database connection.');
-  });
+    const tmpRows = rows.map((row) => {
+      const visitDate = new Date((row.last_visit_time / 1000) + chromeEpoch);
+      return [
+        row.url,
+        row.title,
+        visitDate
+      ];
+    });
+
+    allProfileRows.push(...tmpRows);
+    event.returnValue = allProfileRows;
+  } catch (err) {
+    console.error(err.message);
+    event.returnValue = { error: err.message };
+  } finally {
+    db.close((err) => {
+      if (err) {
+        console.error(err.message);
+      } else {
+        console.log('Closed the database connection.');
+      }
+    });
+  }
 })
 
 app.on('window-all-closed', () => {
