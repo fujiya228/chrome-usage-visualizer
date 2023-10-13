@@ -6,15 +6,149 @@
   <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
   <title>Hello World!</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <h1>Hello World!</h1>
-  We are using Node.js <span id="node-version"></span>,
-  Chromium <span id="chrome-version"></span>,
-  and Electron <span id="electron-version"></span>.
-
   <button id="loadDataBtn">loadDataBtn</button>
+  <div class="container">
+    <div class="time">
+      <div class="time-header"></div>
+      <div class="time-container">
+        <div class="time__hour">0</div>
+        <div class="time__hour">1</div>
+        <div class="time__hour">2</div>
+        <div class="time__hour">3</div>
+        <div class="time__hour">4</div>
+        <div class="time__hour">5</div>
+        <div class="time__hour">6</div>
+        <div class="time__hour">7</div>
+        <div class="time__hour">8</div>
+        <div class="time__hour">9</div>
+        <div class="time__hour">10</div>
+        <div class="time__hour">11</div>
+        <div class="time__hour">12</div>
+        <div class="time__hour">13</div>
+        <div class="time__hour">14</div>
+        <div class="time__hour">15</div>
+        <div class="time__hour">16</div>
+        <div class="time__hour">17</div>
+        <div class="time__hour">18</div>
+        <div class="time__hour">19</div>
+        <div class="time__hour">20</div>
+        <div class="time__hour">21</div>
+        <div class="time__hour">22</div>
+        <div class="time__hour">23</div>
+      </div>
+    </div>
+    <div id="data">
+      <div id="weekday-0">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-1">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-2">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-3">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-4">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-5">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-6">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-7">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-8">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-9">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-10">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-11">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-12">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-13">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+      <div id="weekday-14">
+        <div class="weekday-header">
+          <div class="weekday-header__week"></div>
+          <div class="weekday-header__date"></div>
+        </div>
+        <div class="weekday-container"></div>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
