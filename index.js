@@ -24,6 +24,14 @@ app.whenReady().then(() => {
 
   fs.copyFileSync(dbPath, tempPath);
 
+  const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000 * 1000; // 2週間分のマイクロ秒
+  const now = new Date().getTime();
+  const chromeEpoch = new Date('1601-01-01T00:00:00Z').getTime();
+
+  // Chromeのエポックからの現在のマイクロ秒
+  const currentMicroseconds = (now - chromeEpoch) * 1000;
+  const twoWeeksAgoMicroseconds = currentMicroseconds - TWO_WEEKS;
+
   const db = new sqlite3.Database(tempPath, sqlite3.OPEN_READONLY, (err) => {
     if (err) {
       console.error(err.message);
@@ -32,13 +40,22 @@ app.whenReady().then(() => {
     console.log('Connected to the database.');
   });
 
-  db.all("SELECT name, sql FROM sqlite_master WHERE type='table'", [], (err, rows) => {
+  const query = `
+    SELECT url, title, last_visit_time
+    FROM urls
+    WHERE last_visit_time > ?
+    ORDER BY last_visit_time DESC
+`;
+
+  db.all(query, [twoWeeksAgoMicroseconds], (err, rows) => {
     if (err) {
       console.error(err.message);
       return;
     }
     rows.forEach((row) => {
-      console.log(`Table: ${row.name}\nSQL: ${row.sql}\n`);
+      // ChromeのタイムスタンプをJavaScriptのDateに変換
+      const visitDate = new Date((row.last_visit_time / 1000) + chromeEpoch);
+      console.log(`URL: ${row.url}, Title: ${row.title}, Last Visit: ${visitDate}`);
     });
   });
 
