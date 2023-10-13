@@ -3,6 +3,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
+const getProfileDirectories = require('./getProfileDirectories');
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -24,6 +25,10 @@ ipcMain.on('get-data', async (event) => {
   console.log(username);
 
   const allProfileRows = [];
+  const chromePath = `/Users/${username}/Library/Application Support/Google/Chrome/`;
+  const profiles = getProfileDirectories(chromePath);
+
+  console.log(profiles);
 
   const dbPath = `/Users/${username}/Library/Application Support/Google/Chrome/Default/History`;
   const tempPath = path.join(__dirname, 'tempHistoryCopy');
