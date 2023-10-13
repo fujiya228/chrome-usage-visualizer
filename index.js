@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron')
+const fs = require('fs');
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -9,8 +10,18 @@ const createWindow = () => {
   win.loadFile('index.html')
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow()
+
+  fs.readFile('./renovate.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error('An error occurred:', err);
+      return;
+    }
+    console.log(data);
+  });
+})
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
+  app.quit()
 })
